@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Poshtik',
       theme: ThemeData(
         primaryColor: Colors.purple,
-        secondaryHeaderColor: Colors.orange[100],
+        secondaryHeaderColor: Colors.orange[500],
       ),
       home: IntroScreen(),
     );
@@ -47,9 +47,9 @@ class IntroScreen extends StatelessWidget {
               letterSpacing: 1.2),
         ),
         image: Image.asset('assets/logo.png', fit: BoxFit.scaleDown),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.deepPurple,
         styleTextUnderTheLoader: new TextStyle(),
         photoSize: 150.0,
-        loaderColor: Colors.red);
+        loaderColor: Colors.orange);
   }
 }

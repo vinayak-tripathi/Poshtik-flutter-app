@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:vt/data/data.dart';
 import 'package:vt/screens/home.dart';
@@ -14,10 +12,8 @@ class Finalscreen extends StatefulWidget {
 }
 
 class _FinalscreenState extends State<Finalscreen> {
-  
   @override
   Widget build(BuildContext context) {
-    User? result = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -72,7 +68,7 @@ class _FinalscreenState extends State<Finalscreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => Home(uid: result!.uid),
+                        builder: (_) => Home(),
                       ),
                     );
                   },

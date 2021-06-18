@@ -73,9 +73,9 @@ final _thaliMenu = [
   Types(
     name: 'Unlimited Thali',
     image: 'assets/uthali.jpg',
-    star: "4.0",
+    star: "4.5",
     price: 80,
-    cal: "789 Kcal",
+    cal: "1250 cal",
     number: 1,
   ),
   Types(
@@ -83,7 +83,7 @@ final _thaliMenu = [
     image: 'assets/lthali.png',
     star: "4.2",
     price: 60,
-    cal: "679 Kcal",
+    cal: "1200 cal",
     number: 1,
   ),
 ];

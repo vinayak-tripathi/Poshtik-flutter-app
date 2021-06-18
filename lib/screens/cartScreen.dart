@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vt/data/data.dart';
-import 'package:vt/screens/Finalscreen.dart';
+//import 'package:vt/screens/Finalscreen.dart';
 
 import 'Foodscreen.dart';
 
@@ -13,9 +13,11 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  get bottomNavigationBar => null;
+
   @override
   Widget build(BuildContext context) {
-    double cost = 0.00;
+    double cost = 0;
     String time = "0";
 
     for (int i = 0; i < cart.length; i++) {
@@ -30,65 +32,94 @@ class _CartScreenState extends State<CartScreen> {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('My Cart'),
+        centerTitle: true,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CartScreen(),
+              ),
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${cart.length} Items',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.deepPurple,
+        currentIndex: 0,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,  //CHANGE THIS TO GREY ON SELECTED
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
+              label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.account_balance_wallet_rounded,
+                color: Colors.white,
+              ),
+              label: "Pay & Checkout"),
+        ],
+
+      ),
+
+      resizeToAvoidBottomInset: false,
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Theme.of(context).primaryColor,
         child: SafeArea(
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios_sharp,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          "My Cart",
-                          style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                              letterSpacing: 1.2),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            "${cart.length} Items",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                letterSpacing: 1.2),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 80.0),
+                padding: const EdgeInsets.only(top: 0),
                 child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        stops: [
+                          0.3,
+                          0.6,
+                          0.8
+                        ],
+                        colors: [
+                          Colors.deepPurple,
+                          Colors.deepOrangeAccent,
+                          Colors.orange
+                        ],
+                      )
+                  ),
                   child: Positioned(
-                    top: 60,
+                    top: 20,
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        physics: ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return Stack(
                             children: [
@@ -125,7 +156,7 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(15.0),
                                         child: Container(
                                           child: Column(
                                             crossAxisAlignment:
@@ -141,7 +172,7 @@ class _CartScreenState extends State<CartScreen> {
                                                         FontWeight.w600),
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(15.0),
                                                 child: Text(
                                                   "Rs. ${cart[index].price}",
                                                   style: TextStyle(
@@ -155,48 +186,6 @@ class _CartScreenState extends State<CartScreen> {
                                                 padding: const EdgeInsets.all(2.0),
                                                 child: Row(
                                                   children: [
-                                                    Container(
-                                                      width: 30,
-                                                      height: 30,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        border: Border.all(
-                                                          width: 2,
-                                                          color: Colors.white.withOpacity(
-                                                              0.8),  // change color
-                                                        ),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.remove,
-                                                        size: 15,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(2.0),
-                                                      child: Text(" 1 "),
-                                                    ),
-                                                    Container(
-                                                      width: 30,
-                                                      height: 30,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50),
-                                                        border: Border.all(
-                                                          width: 2,
-                                                          color: Colors.white
-                                                              .withOpacity(
-                                                                  0.8), // change color
-                                                        ),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.add,
-                                                        size: 15,
-                                                      ),
-                                                    ),
                                                   ],
                                                 ),
                                               ),
@@ -230,8 +219,7 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                     child: Icon(
                                       Icons.delete_outline_rounded,
-                                      color: Theme.of(context)
-                                          .secondaryHeaderColor,
+                                      color: Colors.white,
                                       size: 15,
                                     ),
                                   ),
@@ -250,95 +238,6 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Theme.of(context).primaryColor.withOpacity(0.9),
-                  ),
-                  height: 140,
-                  width: size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Estimated time for food: ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  letterSpacing: 1.2),
-                            ),
-                            Text(
-                              "$time minutes",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  letterSpacing: 1.2),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Total cost:",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                  letterSpacing: 1.2),
-                            ),
-                            Text(
-                              'Rs. ${cost.toStringAsFixed(0)}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                letterSpacing: 1.2,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: size.width,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.orange.withOpacity(1)),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Finalscreen(cost: cost),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Checkout",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  letterSpacing: 2),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
         ),

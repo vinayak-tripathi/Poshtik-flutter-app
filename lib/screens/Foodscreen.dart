@@ -81,62 +81,10 @@ class _FoodscreenState extends State<Foodscreen> {
                             child: Text(
                               'Rs. ${widget.county!.price}',
                               style: TextStyle(
-                                  color: Theme.of(context).secondaryHeaderColor,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 30,
+                                  fontSize: 23,
                                   letterSpacing: 1.2),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      border: Border.all(
-                                        width: 2,
-                                        color: Colors.grey
-                                            .withOpacity(0.5), // change color
-                                      ),
-                                    ),
-                                    child: Icon(
-                                      Icons.remove,
-                                      size: 20,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8.0, right: 8),
-                                    child: Text(
-                                      widget.county!.number.toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 25,
-                                          letterSpacing: 1.2),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      border: Border.all(
-                                        width: 2,
-                                        color: Colors.grey
-                                            .withOpacity(0.5), // change color
-                                      ),
-                                    ),
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
                         ],
@@ -214,7 +162,7 @@ class _FoodscreenState extends State<Foodscreen> {
                       ),
                     ),
                     Text(
-                      "Never tasteless, disgusting, or nauseating. Meals are tasty, appetizing, scrumptious, yummy, luscious, delectable, mouth-watering, fit for a king.",
+                      " Healthy, tasty food. Makes you feel like you are having home food, away from home. Meals are appetizing and scrumptious.",
                       style: TextStyle(color: Colors.grey),
                     ),
                     Padding(
@@ -236,7 +184,7 @@ class _FoodscreenState extends State<Foodscreen> {
                                   "Add to Cart",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 15,
+                                      fontSize: 18,
                                       color: Colors.white,
                                       letterSpacing: 1.2),
                                 ),

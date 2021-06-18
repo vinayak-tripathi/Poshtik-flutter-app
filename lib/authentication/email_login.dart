@@ -11,11 +11,12 @@ class EmailLogIn extends StatefulWidget {
 class _EmailLogInState extends State<EmailLogIn> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  bool _hidden=true, isLoading=false;
+  bool _hidden=false, isLoading=false;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Container(
@@ -67,7 +68,7 @@ class _EmailLogInState extends State<EmailLogIn> {
                     child: Container(
                       margin: const EdgeInsets.only(top: 80.0),
                       width: MediaQuery.of(context).size.width / 1.25,
-                      height: MediaQuery.of(context).size.height / 1.3,
+                      height: MediaQuery.of(context).size.height / 1.5,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
@@ -79,7 +80,7 @@ class _EmailLogInState extends State<EmailLogIn> {
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 50.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 50.0),
                                   child: Container(
                                     height: 40,
                                     decoration: BoxDecoration(
@@ -104,43 +105,34 @@ class _EmailLogInState extends State<EmailLogIn> {
                                         Container(
                                           height: 40,
                                           width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              3.5,
+                                              .size
+                                              .width,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(20),
-                                            color: Colors.purple,
+                                            BorderRadius.circular(20),
+                                            color: Colors.orange[500],
                                           ),
                                         ),
-                                        
                                         Center(
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
+                                            MainAxisAlignment.spaceAround,
                                             children: [
-                                              Text(
-                                                "Log In",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white),
-                                              ),
                                               TextButton(
-                                                  child: Text(
-                                                    'Sign Up',
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.w400,
-                                                      color: Colors.purple),
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(builder: (context) => EmailSignUp()),
-                                                    );
-                                                  },
-                                                )
+                                                child: Text(
+                                                  'Not Signed Up?',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.black),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => EmailSignUp()),
+                                                  );
+                                                },
+                                              )
                                             ],
                                           ),
                                         ),
@@ -150,93 +142,99 @@ class _EmailLogInState extends State<EmailLogIn> {
                                 ),
                               ),
                             ],
-                          ),   
-                      Form(
-                        key: _formKey,
-                        child: SingleChildScrollView(
-                            child: Column(children: <Widget>[
-                          Padding(
-                             padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-                                    child: TextFormField(
-                                      controller: email,
-                                      decoration: InputDecoration(
-                                        isDense: true,
-                                        labelText: "Enter Email Address",
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          Form(
+                              key: _formKey,
+                              child: SingleChildScrollView(
+                                  child: Column(children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+                                      child: TextFormField(
+                                        controller: email,
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          labelText: "Enter Email Address",
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30.0),
+                                          ),
+
                                         ),
-                                        
+                                        // The validator receives the text that the user has entered.
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Enter an Email Address';
+                                          } else if (!value.contains('@')) {
+                                            return 'Please enter a valid email address';
+                                          }
+                                          return null;
+                                        },
                                       ),
-                                      // The validator receives the text that the user has entered.
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Enter an Email Address';
-                                        } else if (!value.contains('@')) {
-                                          return 'Please enter a valid email address';
-                                        }
-                                        return null;
-                                      },
                                     ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: TextFormField(
-                              obscureText: _hidden,
-                              controller: password,
-                              decoration: InputDecoration(
-                                        isDense: true,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                labelText: "Enter Password",
-                                
-                                suffixIcon: IconButton(
-                                              icon: Icon(_hidden?Icons.visibility:Icons.visibility_off,), 
+                                    Padding(
+                                      padding: EdgeInsets.all(20.0),
+                                      child: TextFormField(
+                                        obscureText: _hidden,
+                                        controller: password,
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30.0),
+                                          ),
+                                          labelText: "Enter Password",
+
+                                          suffixIcon: IconButton(
+                                              icon: Icon(_hidden?Icons.visibility_off:Icons.visibility,),
                                               onPressed: () {
-                                              setState((){_hidden=!_hidden;});
-                                              }//write the function of the pasword field
-                                            ),
-                              ),
-                              // The validator receives the text that the user has entered.
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Enter Password';
-                                } else if (value.length < 6) {
-                                  return 'Password must be atleast 6 characters!';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: isLoading
-                                ? CircularProgressIndicator()
-                                : ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
+                                                setState((){_hidden=!_hidden;});
+                                              }//write the function of the password field
+                                          ),
+                                        ),
+                                        // The validator receives the text that the user has entered.
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Enter Password';
+                                          } else if (value.length < 6) {
+                                            return 'Password must be at least 6 characters!';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding: EdgeInsets.all(35.0),
+                                      child: isLoading
+                                          ? CircularProgressIndicator()
+                                          : ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
                                             shape: new RoundedRectangleBorder(
                                               borderRadius: new BorderRadius.circular(30.0),
-                                            ),
-                                            primary: Colors.orange,
+                                              ),
+                                            primary: Colors.deepPurple,
                                             padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                                             textStyle: TextStyle(
-                                                fontSize: 15,
+                                              fontSize: 20,
                                             )),
-                                    onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        logInToFb();
-                                      }
-                                    },
-                                    child: Text('Login'),
-                                  ),
-                                )
-                              ]
-                            )
-                          )
-                        ),
+                                            onPressed: () {
+                                              if (_formKey.currentState!.validate()) {
+                                              setState(() {
+                                              isLoading = true;
+                                            });
+                                              logInToFb();
+                                              }
+                                            },
+                                            child: Text('Login!',
+                                                style: TextStyle(
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white),
+                                            ),
+                                      ),
+                                    )
+                                  ]
+                                  )
+                              )
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -267,17 +265,17 @@ class _EmailLogInState extends State<EmailLogIn> {
         ],
       ),
 
-      
+
     );
-    
+
   }
 
 
   void logInToFb() {
-  
+
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
-            email: email.text, password: password.text)
+        email: email.text, password: password.text)
         .then((result) {
       isLoading = false;
       Navigator.pushReplacement(

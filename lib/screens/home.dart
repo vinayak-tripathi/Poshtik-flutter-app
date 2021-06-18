@@ -13,18 +13,16 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        
-        
         body:Container(
           width: double.infinity,
           height: double.infinity,
-          color: Theme.of(context).secondaryHeaderColor,
+          color: Colors.purple[50],
           child: SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 10.0, left: 20),
+                  padding: const EdgeInsets.only(top: 15.0, left: 20),
                   child: Text(
                     'Categories',
                     style: TextStyle(
@@ -40,19 +38,21 @@ class Home extends StatelessWidget {
         ),
        
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
+        backgroundColor: Colors.deepPurple[500],
+        currentIndex: 0,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,   //CHANGE THIS TO GREY ON SELECTED
         items: [
           BottomNavigationBarItem(
              icon: Icon(
                 Icons.home,
-                color: Colors.black,
+                color: Colors.white,
               ),
               label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.shopping_cart,
-                color: Colors.black,
+                color: Colors.white,
               ),
               label: "Cart"),
         ],
@@ -73,10 +73,10 @@ class Home extends StatelessWidget {
           }
         },
       ),
-    appBar: AppBar(
-          centerTitle:true,
+      appBar: AppBar(
+          centerTitle: true,
           title: Text(title),
-          backgroundColor: Colors.purple,
+          backgroundColor: Theme.of(context).primaryColor,
           actions: <Widget>[
             GestureDetector(
                   onTap: () => Navigator.push(
@@ -154,7 +154,7 @@ class _NavigateDrawerState extends State<NavigateDrawer> {
                   }
                 }),
             decoration: BoxDecoration(
-              color: Colors.purple,
+              color: Colors.deepPurple,
             ),
           ),
           ListTile(
