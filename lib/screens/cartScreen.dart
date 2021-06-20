@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vt/data/data.dart';
 //import 'package:vt/screens/Finalscreen.dart';
 
 import 'Foodscreen.dart';
-
+import 'home.dart';
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -14,14 +16,17 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   get bottomNavigationBar => null;
-
+  DatabaseReference order = FirebaseDatabase.instance.reference().child("Food Order");
+  User? result = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
+    
     double cost = 0;
     String time = "0";
-
+    String food = "";
     for (int i = 0; i < cart.length; i++) {
       cost += cart[i].price;
+      food = food + cart[i].name + "|";
     }
     if (cart.length > 0) {
       time = "10";
@@ -85,6 +90,41 @@ class _CartScreenState extends State<CartScreen> {
               ),
               label: "Pay & Checkout"),
         ],
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home(uid:result!.uid)),
+              );
+          }
+          else{
+            if (cart.length==0){
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Your Cart is Empty"),
+                    content: Text("Looks like you haven't added anything to your cart yet"),
+                    actions: [
+                      TextButton(
+                        child: Text("Ok"),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home(uid:result!.uid)),
+                            );
+                        },
+                      )
+                    ],
+                  );
+                }
+              );
+            }
+            else{
+              foodOrder(cost,time,food);
+            }
+          }
+        }
 
       ),
 
@@ -203,7 +243,7 @@ class _CartScreenState extends State<CartScreen> {
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      cart.removeLast();
+                                      cart.removeAt(index);
                                     });
                                   },
                                   child: Container(
@@ -245,5 +285,34 @@ class _CartScreenState extends State<CartScreen> {
     
     );
   
+  }
+
+  void foodOrder(cost,time,food){
+    order.child(result!.uid).set({
+      "Item": food,
+      "Total Cost": cost
+    }).then((_){
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Happy eating"),
+              content: Text("Your order is sent. Please check in " + time + " min"),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home(uid:result!.uid)),
+                    );
+                  },
+                )
+              ],
+            );
+          }
+        );
+      }
+    );
   }
 }

@@ -10,8 +10,7 @@ class EmailSignUp extends StatefulWidget {
 
 class _EmailSignUpState extends State<EmailSignUp> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  DatabaseReference dbRef =
-  FirebaseDatabase.instance.reference().child("Users");
+  DatabaseReference users = FirebaseDatabase.instance.reference().child("Users");
   bool isLoading = false, _hidden=false;
   final _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
@@ -302,7 +301,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
         .createUserWithEmailAndPassword(
         email: email.text, password: password.text)
         .then((result) {
-      dbRef.child(result.user!.uid).set({
+      users.child(result.user!.uid).set({
         "email": email.text,
         "phone": phone.text,
         "name": name.text

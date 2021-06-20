@@ -76,7 +76,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
           centerTitle: true,
           title: Text(title),
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.deepPurple,
           actions: <Widget>[
             GestureDetector(
                   onTap: () => Navigator.push(
