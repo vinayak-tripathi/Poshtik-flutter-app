@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vt/data/data.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 //import 'package:vt/screens/Finalscreen.dart';
 
 import 'Foodscreen.dart';
@@ -17,13 +18,17 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   get bottomNavigationBar => null;
   DatabaseReference order = FirebaseDatabase.instance.reference().child("Food Order");
+  DatabaseReference users = FirebaseDatabase.instance.reference().child("Users");
   User? result = FirebaseAuth.instance.currentUser;
+  double cost = 0;
+  String time = "0";
+  String food = "";
+  late Razorpay razorpay;
+  
   @override
   Widget build(BuildContext context) {
     
-    double cost = 0;
-    String time = "0";
-    String food = "";
+    
     for (int i = 0; i < cart.length; i++) {
       cost += cart[i].price;
       food = food + cart[i].name + "|";
@@ -35,10 +40,13 @@ class _CartScreenState extends State<CartScreen> {
       time = "20";
     }
 
+    
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('My Cart'),
+        backgroundColor: Colors.deepPurple,
         centerTitle: true,
         actions: <Widget>[
           GestureDetector(
@@ -121,6 +129,7 @@ class _CartScreenState extends State<CartScreen> {
               );
             }
             else{
+              //pay();
               foodOrder(cost,time,food);
             }
           }
@@ -288,6 +297,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void foodOrder(cost,time,food){
+    print("Hell Yeah--------------------------------------------------");
     order.child(result!.uid).set({
       "Item": food,
       "Total Cost": cost
@@ -297,15 +307,13 @@ class _CartScreenState extends State<CartScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text("Happy eating"),
-              content: Text("Your order is sent. Please check in " + time + " min"),
+              content: Text("Your order is sent. Please check in " + time + " min"+"\nPlease pay the amount."),
               actions: [
                 TextButton(
-                  child: Text("Ok"),
+                  child: Text("Pay"),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home(uid:result!.uid)),
-                    );
+                      pay();
+                      Navigator.of(context,rootNavigator:true).pop(context);
                   },
                 )
               ],
@@ -315,4 +323,86 @@ class _CartScreenState extends State<CartScreen> {
       }
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    razorpay = new Razorpay();
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
+  }
+
+  @override
+    void dispose() {
+      super.dispose();
+    razorpay.clear(); // Removes all listeners
+  }
+
+  void pay(){
+    String phone='',email='', food="";
+    double cost=0;
+    users.child(result!.uid).once().then((DataSnapshot snapshot){
+      Map<dynamic, dynamic> values = snapshot.value;
+          setState((){
+            email=values['email'];
+          });
+          setState((){
+            phone=values['phone'];
+          });
+          print("this is VT"); 
+          print(email);
+    });
+    for (int i = 0; i < cart.length; i++) {
+      cost += cart[i].price;
+      food = food + cart[i].name + "|";
+    }
+    //print("vinayak___________________________________________________________________");
+    print(email);
+    var options = {
+      'key': 'rzp_test_I61OgCCUr759ee',
+      'amount': cost*100, //in the smallest currency sub-unit.
+      'name': 'Poshtik App',
+      //'order_id': 'order_EMBFqjDHEEn80l', // Generate order_id using Orders API
+      'description': food,
+      'theme':{'color': '#673ab7'},
+      //'timeout': 60, // in seconds
+      'prefill': {
+        'contact': phone,
+        'email': email
+      },
+      'external': {
+        'wallets': 'paytm'
+      }
+    };
+    //print("vinayak------------------------------------------------------------------------------");
+    try {
+      razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void handlePaymentSuccess(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home(uid:result!.uid))
+    );
+    
+  }
+
+  void handlePaymentError(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home(uid:result!.uid))
+    );
+  }
+
+  void handleExternalWallet(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home(uid:result!.uid))
+    );
+  }
+
 }

@@ -8,7 +8,6 @@ import 'package:vt/screens/cartScreen.dart';
 class Home extends StatelessWidget {
   Home({this.uid});
   final String? uid;
-  final String title = "Poshtik";
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -75,7 +74,7 @@ class Home extends StatelessWidget {
       ),
       appBar: AppBar(
           centerTitle: true,
-          title: Text(title),
+          title: Text("Poshtik"),
           backgroundColor: Colors.deepPurple,
           actions: <Widget>[
             GestureDetector(

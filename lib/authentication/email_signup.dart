@@ -11,7 +11,7 @@ class EmailSignUp extends StatefulWidget {
 class _EmailSignUpState extends State<EmailSignUp> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   DatabaseReference users = FirebaseDatabase.instance.reference().child("Users");
-  bool isLoading = false, _hidden=false;
+  bool isLoading = false, _hidden=true;
   final _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController name = TextEditingController();

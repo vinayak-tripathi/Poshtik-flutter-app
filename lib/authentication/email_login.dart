@@ -11,7 +11,7 @@ class EmailLogIn extends StatefulWidget {
 class _EmailLogInState extends State<EmailLogIn> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  bool _hidden=false, isLoading=false;
+  bool _hidden=true, isLoading=false;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
