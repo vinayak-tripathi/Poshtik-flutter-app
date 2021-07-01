@@ -130,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
             }
             else{
               //pay();
-              foodOrder(cost,time,food);
+              foodOrder(time);
             }
           }
         }
@@ -296,11 +296,16 @@ class _CartScreenState extends State<CartScreen> {
   
   }
 
-  void foodOrder(cost,time,food){
-    print("Hell Yeah--------------------------------------------------");
+  void foodOrder(time){
+    String food="";
+    double cost=0;
+    for (int i = 0; i < cart.length; i++) {
+            cost += cart[i].price;
+            food = food + cart[i].name + "|";
+          }
     order.child(result!.uid).set({
       "Item": food,
-      "Total Cost": cost
+      "Cost": cost
     }).then((_){
       showDialog(
           context: context,
@@ -344,43 +349,47 @@ class _CartScreenState extends State<CartScreen> {
     double cost=0;
     users.child(result!.uid).once().then((DataSnapshot snapshot){
       Map<dynamic, dynamic> values = snapshot.value;
-          setState((){
-            email=values['email'];
-          });
-          setState((){
-            phone=values['phone'];
-          });
+          // setState((){
+          //   email=values['email'];
+          // });
+          // setState((){
+          //   phone=values['phone'];
+          // });
+          email=values["email"];
+          phone=values["phone"];
+          
+          // List itemList=[];
+          // itemList.add(values);
           print("this is VT"); 
+          print(phone);
+          
+          //print("vinayak___________________________________________________________________");
           print(email);
+          var options = {
+            'key': 'rzp_test_I61OgCCUr759ee',
+            'amount': cost*100, //in the smallest currency sub-unit.
+            'name': 'Poshtik App',
+            //'order_id': 'order_EMBFqjDHEEn80l', // Generate order_id using Orders API
+            'description': food,
+            'theme':{'color': '#673ab7'},
+            //'timeout': 60, // in seconds
+            'prefill': {
+              'contact': phone,
+              'email': email
+            },
+            'external': {
+              'wallets': 'paytm'
+            }
+          };
+          //print("vinayak------------------------------------------------------------------------------");
+          try {
+            razorpay.open(options);
+          } catch (e) {
+            print(e.toString());
+          }
+          
     });
-    for (int i = 0; i < cart.length; i++) {
-      cost += cart[i].price;
-      food = food + cart[i].name + "|";
-    }
-    //print("vinayak___________________________________________________________________");
-    print(email);
-    var options = {
-      'key': 'rzp_test_I61OgCCUr759ee',
-      'amount': cost*100, //in the smallest currency sub-unit.
-      'name': 'Poshtik App',
-      //'order_id': 'order_EMBFqjDHEEn80l', // Generate order_id using Orders API
-      'description': food,
-      'theme':{'color': '#673ab7'},
-      //'timeout': 60, // in seconds
-      'prefill': {
-        'contact': phone,
-        'email': email
-      },
-      'external': {
-        'wallets': 'paytm'
-      }
-    };
-    //print("vinayak------------------------------------------------------------------------------");
-    try {
-      razorpay.open(options);
-    } catch (e) {
-      print(e.toString());
-    }
+    
   }
 
   void handlePaymentSuccess(){
