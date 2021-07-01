@@ -1,6 +1,7 @@
-# vt
+# Poshtik
 
 A new Flutter project.
+Mini Project 1 for 4th semester.
 
 ## Getting Started
 
