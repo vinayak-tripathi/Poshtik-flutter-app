@@ -297,15 +297,15 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void foodOrder(time){
-    String food="";
-    double cost=0;
+    String foo="";
+    double cos=0;
     for (int i = 0; i < cart.length; i++) {
-            cost += cart[i].price;
-            food = food + cart[i].name + "|";
+            cos += cart[i].price;
+            foo = foo + cart[i].name + "|";
           }
     order.child(result!.uid).set({
-      "Item": food,
-      "Cost": cost
+      "Item": foo,
+      "Cost": cos
     }).then((_){
       showDialog(
           context: context,
@@ -345,8 +345,13 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void pay(){
-    String phone='',email='', food="";
-    double cost=0;
+    print("payment");
+    String phone='',email='', foo="";
+    double cos=0;
+    for (int i = 0; i < cart.length; i++) {
+            cos += cart[i].price;
+            foo = foo + cart[i].name + "|";
+          }
     users.child(result!.uid).once().then((DataSnapshot snapshot){
       Map<dynamic, dynamic> values = snapshot.value;
           // setState((){
@@ -366,11 +371,11 @@ class _CartScreenState extends State<CartScreen> {
           //print("vinayak___________________________________________________________________");
           print(email);
           var options = {
-            'key': 'rzp_test_I61OgCCUr759ee',
-            'amount': cost*100, //in the smallest currency sub-unit.
+            'key': 'rzp_test_rmlGbf3yFTvV7S',
+            'amount': cos*100, //in the smallest currency sub-unit.
             'name': 'Poshtik App',
             //'order_id': 'order_EMBFqjDHEEn80l', // Generate order_id using Orders API
-            'description': food,
+            'description': foo,
             'theme':{'color': '#673ab7'},
             //'timeout': 60, // in seconds
             'prefill': {
@@ -386,6 +391,7 @@ class _CartScreenState extends State<CartScreen> {
             razorpay.open(options);
           } catch (e) {
             print(e.toString());
+            print("Error");
           }
           
     });
@@ -393,10 +399,16 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void handlePaymentSuccess(){
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Home(uid:result!.uid))
+    order.child(result!.uid).set({
+      "paid":"yes"
+    }).then((_){
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home(uid:result!.uid))
+        );
+      }
     );
+    
     
   }
 
